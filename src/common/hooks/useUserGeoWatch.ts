@@ -14,7 +14,6 @@ const useUserGeoWatch = () => {
   }, [setPos])
 
   useEffect(() => {
-    console.log(pos)
     if (pos) dispatch(pushPositionAction(pos))
   }, [pos, dispatch])
 }
