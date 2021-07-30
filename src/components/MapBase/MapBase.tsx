@@ -3,9 +3,10 @@ import MapGL, { NavigationControl } from 'react-map-gl'
 import MapEditor from '../MapEditor/MapEditor'
 import UserPath from '../UserPath/UserPath'
 import useUserGeoWatch from 'common/hooks/useUserGeoWatch'
+import { TOKEN, STYLE } from './config'
 
-const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
-const STYLE = process.env.REACT_APP_MAPBOX_STYLE
+// const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
+// const STYLE = process.env.REACT_APP_MAPBOX_STYLE
 
 const MapBase: React.FC = () => {
   const [viewport, setViewport] = useState({
