@@ -1,11 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MapGL, { NavigationControl } from 'react-map-gl'
 import MapEditor from '../MapEditor/MapEditor'
 import UserPath from '../UserPath/UserPath'
 import useUserGeoWatch from 'common/hooks/useUserGeoWatch'
-import { TOKEN, STYLE } from './config' // Need to GitHub pages work
+import { STYLE, TOKEN } from './config' // Need to GitHub pages work
 import ViewportInfo from './component/ViewportInfo/ViewportInfo'
 import ModeButtons from 'components/ModeButtons/ModeButtons'
+import { useSelector } from 'react-redux'
+import { getModeSelector } from 'store/mode'
+import { getUserPositionSelector } from 'store/user-path'
 
 // const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
 // const STYLE = process.env.REACT_APP_MAPBOX_STYLE
@@ -17,18 +20,26 @@ const MapBase: React.FC = () => {
     zoom: 12,
   })
 
-  const watchPosition = useCallback(
-    (pos: GeolocationPosition) => {
-      setViewport({
-        ...viewport,
-        latitude: pos.coords.latitude,
-        longitude: pos.coords.longitude,
-      })
-    },
-    [viewport, setViewport]
-  )
+  const mode = useSelector(getModeSelector)
+  const position = useSelector(getUserPositionSelector)
 
-  useUserGeoWatch(watchPosition)
+  useEffect(() => {
+    switch (mode) {
+      case 'FREE':
+        return undefined
+      case 'NAVIGATE': {
+        position &&
+          setViewport({
+            longitude: position.coords.longitude,
+            latitude: position.coords.latitude,
+            zoom: 16,
+          })
+        return undefined
+      }
+    }
+  }, [mode, position, setViewport])
+
+  useUserGeoWatch()
 
   return (
     <div
@@ -39,7 +50,6 @@ const MapBase: React.FC = () => {
     >
       <MapGL
         {...viewport}
-        onClick={(e) => console.log(e)}
         width='100%'
         height='100%'
         mapStyle={STYLE}
