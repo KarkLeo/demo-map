@@ -9,6 +9,7 @@ import ModeButtons from 'components/ModeButtons/ModeButtons'
 import { useSelector } from 'react-redux'
 import { getModeSelector } from 'store/mode'
 import { getUserPositionSelector } from 'store/user-path'
+import CurrentPoint from '../CurrentPoint/CurrentPoint'
 
 // const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
 // const STYLE = process.env.REACT_APP_MAPBOX_STYLE
@@ -56,9 +57,10 @@ const MapBase: React.FC = () => {
         onViewportChange={setViewport}
         mapboxApiAccessToken={TOKEN}
       >
-        <NavigationControl />
-        <MapEditor />
+        {mode !== 'NAVIGATE' && <NavigationControl />}
+        {mode === 'EDIT' && <MapEditor />}
         <UserPath />
+        <CurrentPoint />
       </MapGL>
       <ViewportInfo viewport={viewport} />
       <ModeButtons />

@@ -5,7 +5,8 @@ import CSS from 'csstype'
 
 const buttonWrap: CSS.Properties = {
   position: 'fixed',
-  top: '20px',
+  zIndex: 999,
+  top: '30px',
   right: '20px',
   display: 'flex',
   flexDirection: 'column',
@@ -13,7 +14,10 @@ const buttonWrap: CSS.Properties = {
 }
 
 const MapEditor: React.FC = () => {
-  const [mode, setMode] = useState<EditingMode | DrawPolygonMode | null>(null)
+  const [mode, setMode] = useState<EditingMode | DrawPolygonMode>(
+    new EditingMode()
+  )
+  console.log(mode && mode.constructor.name)
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState<
     number | null
   >(null)
@@ -54,8 +58,16 @@ const MapEditor: React.FC = () => {
         featuresDraggable={true}
       />
       <div style={buttonWrap}>
-        <button onClick={() => setMode(new DrawPolygonMode())}>New poly</button>
-        <button onClick={onDelete}>Delete</button>
+        {mode && mode.constructor.name !== 'DrawPolygonMode' && (
+          <button onClick={() => setMode(new DrawPolygonMode())}>
+            New poly
+          </button>
+        )}
+        {mode &&
+          mode.constructor.name !== 'DrawPolygonMode' &&
+          selectedFeatureIndex !== null && (
+            <button onClick={onDelete}>Delete</button>
+          )}
       </div>
     </>
   )

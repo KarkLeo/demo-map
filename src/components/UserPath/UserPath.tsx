@@ -15,7 +15,7 @@ const UserPath: React.FC = () => {
           'line-cap': 'round',
         }}
         paint={{
-          'line-color': '#bc477b',
+          'line-color': '#01579b',
           'line-width': 6,
         }}
       />
