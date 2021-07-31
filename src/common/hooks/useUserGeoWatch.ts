@@ -20,7 +20,7 @@ const useUserGeoWatch = (
       )
     }
     getPosition()
-  }, [setPos])
+  }, [setPos, callback])
 
   useEffect(() => {
     if (pos) dispatch(pushPositionAction(pos))
