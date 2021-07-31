@@ -1,8 +1,9 @@
 import * as actions from './actions'
 
-export interface UserPathState {
-  path: GeolocationPosition[]
-  position: GeolocationPosition | null
+export type ModeType = 'NAVIGATE' | 'EDIT' | 'FREE'
+
+export interface ModeState {
+  mode: ModeType
 }
 
 type ActionsName = keyof typeof actions

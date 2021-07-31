@@ -8,7 +8,11 @@ export const userPathReducer = (
 ): UserPathState => {
   switch (action.type) {
     case PUSH_POSITION:
-      return { ...state, path: [...state.path, action.position] }
+      return {
+        ...state,
+        path: [...state.path, action.position],
+        position: action.position,
+      }
     default:
       return state
   }

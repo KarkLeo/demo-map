@@ -3,8 +3,9 @@ import MapGL, { NavigationControl } from 'react-map-gl'
 import MapEditor from '../MapEditor/MapEditor'
 import UserPath from '../UserPath/UserPath'
 import useUserGeoWatch from 'common/hooks/useUserGeoWatch'
-import { TOKEN, STYLE } from './config'
-import ViewportInfo from './component/ViewportInfo/ViewportInfo' // Need to GitHub pages work
+import { TOKEN, STYLE } from './config' // Need to GitHub pages work
+import ViewportInfo from './component/ViewportInfo/ViewportInfo'
+import ModeButtons from 'components/ModeButtons/ModeButtons'
 
 // const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
 // const STYLE = process.env.REACT_APP_MAPBOX_STYLE
@@ -50,6 +51,7 @@ const MapBase: React.FC = () => {
         <UserPath />
       </MapGL>
       <ViewportInfo viewport={viewport} />
+      <ModeButtons />
     </div>
   )
 }
