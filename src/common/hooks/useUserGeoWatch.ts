@@ -3,12 +3,21 @@ import { getCurrentPosition } from 'services/navigator'
 import { useDispatch } from 'react-redux'
 import { pushPositionAction } from 'store/user-path'
 
-const useUserGeoWatch = () => {
+const useUserGeoWatch = (
+  callback?: (position: GeolocationPosition) => void
+) => {
   const dispatch = useDispatch()
   const [pos, setPos] = useState<GeolocationPosition | null>(null)
   useEffect(() => {
     const getPosition = async () => {
-      await getCurrentPosition(setPos)
+      await getCurrentPosition(
+        callback
+          ? (pos) => {
+              setPos(pos)
+              pos && callback(pos)
+            }
+          : setPos
+      )
     }
     getPosition()
   }, [setPos])
