@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { getCurrentPosition } from 'services/navigator'
+import { stopWatchPosition, watchPosition } from 'services/navigator'
 import { useDispatch } from 'react-redux'
 import { pushPositionAction } from 'store/user-path'
 
@@ -8,15 +8,17 @@ const useUserGeoWatch = (
 ) => {
   const dispatch = useDispatch()
   useEffect(() => {
-    const getPosition = async () => {
-      await getCurrentPosition((pos) => {
+    const startWatchPosition = () =>
+      watchPosition((pos) => {
         if (pos) {
           dispatch(pushPositionAction(pos))
           callback && callback(pos)
         }
       })
+    const watchID = startWatchPosition()
+    return () => {
+      stopWatchPosition(watchID)
     }
-    getPosition()
   }, [dispatch, callback])
 }
 

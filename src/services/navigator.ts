@@ -1,10 +1,10 @@
-export const getCurrentPosition = async (
+export const watchPosition = (
   setPosState: (pos: null | GeolocationPosition) => void
-): Promise<void> => {
+) => {
   const readPosition = (position: GeolocationPosition) => {
     setPosState(position)
   }
-  await navigator.geolocation.watchPosition(
+  return navigator.geolocation.watchPosition(
     readPosition,
     (e) => console.log(e),
     {
@@ -13,3 +13,6 @@ export const getCurrentPosition = async (
     }
   )
 }
+
+export const stopWatchPosition = (watchID: number) =>
+  navigator.geolocation.clearWatch(watchID)
