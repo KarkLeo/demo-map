@@ -1,7 +1,10 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { DrawPolygonMode, EditingMode, Editor } from 'react-map-gl-draw'
 import { getEditHandleStyle, getFeatureStyle } from './style'
 import CSS from 'csstype'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAreasSelector, setAreasAction } from '../../store/areas'
+import { Feature } from '@nebula.gl/edit-modes/src/geojson-types'
 
 const buttonWrap: CSS.Properties = {
   position: 'fixed',
@@ -14,34 +17,47 @@ const buttonWrap: CSS.Properties = {
 }
 
 const MapEditor: React.FC = () => {
+  const dispatch = useDispatch()
   const [mode, setMode] = useState<EditingMode | DrawPolygonMode>(
     new EditingMode()
   )
-  console.log(mode && mode.constructor.name)
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState<
     number | null
   >(null)
 
   const editorRef = useRef<Editor>(null)
 
+  const areas = useSelector(getAreasSelector)
+
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.getFeatures().length === 0) {
+      editorRef.current.addFeatures(areas as Feature[])
+    }
+  }, [editorRef, areas])
+
   const onSelect = useCallback((options) => {
     setSelectedFeatureIndex(options && options.selectedFeatureIndex)
   }, [])
 
-  const onUpdate = useCallback(({ editType }) => {
-    if (editType === 'addFeature') {
-      setMode(new EditingMode())
-    }
-  }, [])
+  const onUpdate = useCallback(
+    ({ editType }) => {
+      if (editType === 'addFeature') {
+        setMode(new EditingMode())
+        editorRef.current &&
+          dispatch(setAreasAction(editorRef.current.getFeatures()))
+      }
+    },
+    [dispatch]
+  )
 
-  const onDelete = useCallback(() => {
+  const onDelete = useCallback(async () => {
     if (selectedFeatureIndex !== null && selectedFeatureIndex >= 0) {
+      await (editorRef.current &&
+        editorRef.current.deleteFeatures(selectedFeatureIndex))
       editorRef.current &&
-        editorRef.current.deleteFeatures(selectedFeatureIndex)
+        dispatch(setAreasAction(editorRef.current.getFeatures()))
     }
-  }, [selectedFeatureIndex])
-
-  // if (editorRef.current) editorRef.current.addFeatures(myFeatures)
+  }, [selectedFeatureIndex, dispatch])
 
   return (
     <>

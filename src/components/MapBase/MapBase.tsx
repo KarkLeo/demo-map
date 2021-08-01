@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { getModeSelector } from 'store/mode'
 import { getUserPositionSelector } from 'store/user-path'
 import CurrentPoint from '../CurrentPoint/CurrentPoint'
+import MapAreas from 'components/MapAreas/MapAreas'
 
 // const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
 // const STYLE = process.env.REACT_APP_MAPBOX_STYLE
@@ -60,6 +61,7 @@ const MapBase: React.FC = () => {
         {mode !== 'NAVIGATE' && <NavigationControl />}
         {mode === 'EDIT' && <MapEditor />}
         <UserPath />
+        {mode !== 'EDIT' && <MapAreas />}
         <CurrentPoint />
       </MapGL>
       <ViewportInfo viewport={viewport} />
