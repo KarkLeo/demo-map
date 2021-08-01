@@ -9,7 +9,7 @@ import { Feature } from '@nebula.gl/edit-modes/src/geojson-types'
 const buttonWrap: CSS.Properties = {
   position: 'fixed',
   zIndex: 999,
-  top: '30px',
+  top: '40px',
   right: '20px',
   display: 'flex',
   flexDirection: 'column',
